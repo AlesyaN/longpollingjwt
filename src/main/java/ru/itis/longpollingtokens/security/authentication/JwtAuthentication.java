@@ -19,8 +19,8 @@ public class JwtAuthentication implements Authentication {
 
     private boolean isAuthenticated;
 
-    @Value("${token.secret-key}")
-    private String secretKey;
+
+    private String secretKey = "tepaIepaspringjpapropertieshibernatejdbclobnoncontextualcreationjavasosibibucontextualcreationjavasosibibu";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -70,15 +70,13 @@ public class JwtAuthentication implements Authentication {
     }
 
     public String getLogin() {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-        Claims body = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
-        return (String)body.get("login");
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return (String) body.get("login");
     }
 
     public Long getId() {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return (Long)body.get("id");
+        return (Long) body.get("id");
     }
 
     public String getToken() {

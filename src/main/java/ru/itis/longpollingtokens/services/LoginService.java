@@ -23,8 +23,7 @@ public class LoginService {
     @Autowired
     PasswordEncoder encoder;
 
-    @Value("${token.secret-key}")
-    private String secretKey;
+    private String secretKey = "tepaIepaspringjpapropertieshibernatejdbclobnoncontextualcreationjavasosibibucontextualcreationjavasosibibu";
 
     public String loginByCredentials(LoginDto loginDto) {
         Optional<User> userCandidate = userRepository.findFirstByLoginIgnoreCase(loginDto.getLogin());
