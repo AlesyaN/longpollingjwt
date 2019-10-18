@@ -2,6 +2,7 @@ package ru.itis.longpollingtokens.security.details;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.itis.longpollingtokens.dto.TokenDto;
 import ru.itis.longpollingtokens.models.User;
 
 import java.util.Collection;
@@ -9,7 +10,7 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
 
     private User user;
-    private String currentToken;
+    private TokenDto currentToken;
 
     public UserDetailsImpl(User user) {
         this.user = user;
@@ -50,7 +51,7 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    public void setCurrentToken(String currentToken) {
+    public void setCurrentToken(TokenDto currentToken) {
         this.currentToken = currentToken;
     }
 
@@ -58,7 +59,7 @@ public class UserDetailsImpl implements UserDetails {
         return user;
     }
 
-    public String getCurrentToken() {
+    public TokenDto getCurrentToken() {
         return currentToken;
     }
 

@@ -20,7 +20,7 @@ public class MessagesController {
     @PostMapping("/messages")
     @ResponseBody
     public ResponseEntity<Object> receiveMessage(@RequestParam("message")String text, Authentication authentication) {
-        String tokenValue = ((UserDetailsImpl) authentication.getPrincipal()).getCurrentToken();
+        String tokenValue = ((UserDetailsImpl) authentication.getPrincipal()).getCurrentToken().getAccessToken();
         if (!messages.containsKey(tokenValue)) {
             messages.put(tokenValue, new ArrayList<>());
         }
@@ -40,7 +40,7 @@ public class MessagesController {
     @SneakyThrows
     @GetMapping("/messages")
     public ResponseEntity<List<MessageDto>> getMessagesForPage(Authentication authentication) {
-        String tokenValue = ((UserDetailsImpl) authentication.getPrincipal()).getCurrentToken();
+        String tokenValue = ((UserDetailsImpl) authentication.getPrincipal()).getCurrentToken().getAccessToken();
         synchronized (messages.get(tokenValue)) {
             if (messages.get(tokenValue).isEmpty()) {
                 messages.get(tokenValue).wait();

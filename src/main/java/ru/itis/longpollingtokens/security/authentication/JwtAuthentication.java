@@ -7,18 +7,22 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import ru.itis.longpollingtokens.dto.TokenDto;
 import ru.itis.longpollingtokens.security.details.UserDetailsImpl;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class JwtAuthentication implements Authentication {
 
     private UserDetailsImpl userDetails;
-    private String token;
+    private TokenDto token;
 
     private boolean isAuthenticated;
 
+//    @Value("${token.secret-key}")
+//    private String secretKey;
 
     private String secretKey = "tepaIepaspringjpapropertieshibernatejdbclobnoncontextualcreationjavasosibibucontextualcreationjavasosibibu";
 
@@ -65,21 +69,30 @@ public class JwtAuthentication implements Authentication {
         this.userDetails = userDetails;
     }
 
-    public void setToken(String token) {
+    public void setToken(TokenDto token) {
         this.token = token;
     }
 
-    public String getLogin() {
-        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    public String getAccessLogin() {
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.getAccessToken()).getBody();
         return (String) body.get("login");
     }
 
-    public Long getId() {
-        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    public Long getAccessId() {
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.getAccessToken()).getBody();
         return (Long) body.get("id");
     }
 
-    public String getToken() {
+    public Long getRefreshId() {
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.getRefreshToken()).getBody();
+        return (Long) body.get("id");
+    }
+
+    public LocalDateTime getAccessExpiresIn() {
+        return token.getAccessExpiresIn();
+    }
+
+    public TokenDto getToken() {
         return token;
     }
 }

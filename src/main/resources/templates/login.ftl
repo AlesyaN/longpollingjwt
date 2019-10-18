@@ -13,13 +13,27 @@
 <a href="/register">Don't have an account? Register!</a>
 <script>
     window.onload = function () {
-        if (window.localStorage.getItem("AUTH") !== null) {
+        var authString = window.localStorage.getItem("AUTH");
+        if (authString !== null) {
+            var auth = JSON.parse(authString);
+            if (new Date(auth.accessExpiresIn) < new Date ) {
+                $.ajax({
+                    url: "/api/refresh-token",
+                    method: "post",
+                    data: {
+                        "refreshToken": auth.refreshToken
+                    },
+                    success: function (token) {
+                        window.localStorage.setItem("AUTH", JSON.stringify(token));
+                    }
+                })
+            }
             $.ajax({
                 url: "/api/login-token",
                 method: "get",
                 contentType: "application/json",
                 headers: {
-                    "AUTH": window.localStorage.getItem("AUTH")
+                    "AUTH": auth
                 },
                 success: function () {
                     window.location.href = '/chat'
@@ -29,20 +43,17 @@
     };
 
     function login() {
-        console.log("Privet login");
         var login = document.getElementById("login").value;
         var password = document.getElementById("password").value;
         $.ajax({
             url: "/api/login-cred",
             method: "get",
-            // contentType: "application/json",
             data: {
                 login: login,
                 password: password
             },
             success: function (token) {
-                window.localStorage.setItem("AUTH", token);
-                console.log(window.localStorage.getItem("AUTH"));
+                window.localStorage.setItem("AUTH", JSON.stringify(token));
                 window.location.href = '/chat'
             }
         });

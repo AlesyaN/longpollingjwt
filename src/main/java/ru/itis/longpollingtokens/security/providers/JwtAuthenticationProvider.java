@@ -29,7 +29,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 = (JwtAuthentication)authentication;
         // загружаем данные безопасности пользователя из UserDetailsService
         // по токену достали пользователя из БД
-        UserDetailsImpl userDetails = (UserDetailsImpl) service.loadUserByUsername(jwtAuthentication.getLogin());
+        UserDetailsImpl userDetails = (UserDetailsImpl) service.loadUserByUsername(jwtAuthentication.getAccessLogin());
         userDetails.setCurrentToken(jwtAuthentication.getToken());
         // если данные пришли
         if (userDetails != null) {
