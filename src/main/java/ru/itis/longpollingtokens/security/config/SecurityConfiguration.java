@@ -37,11 +37,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().disable();
         // добавляем наш фильтр
         http.addFilterBefore(new JwtAuthenticationFilter(), BasicAuthenticationFilter.class);
-        http.authorizeRequests()
-                .antMatchers("/api/login-token", "/api/login-cred").permitAll()
-                .antMatchers("/chat").authenticated().and()
-        .formLogin()
-                .loginPage("/login");
+        http.cors().disable().authorizeRequests()
+                .antMatchers("/login-token", "/login-cred").permitAll()
+                .antMatchers("/chat").permitAll();
     }
 
 }
